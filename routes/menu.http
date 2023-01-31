@@ -1,0 +1,13 @@
+### 
+GET  http://localhost:8000/menu
+
+
+### 
+POST  http://localhost:8000/menu
+Content-Type: application/json
+
+{
+    "menuName":"Home",
+    "link":"/home",
+    "position":1
+}

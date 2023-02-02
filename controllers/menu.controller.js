@@ -7,14 +7,14 @@ const dataFile = process.cwd() + "/data/menu.json";
 exports.getAll = (req, res) => {
     fs.readFile(dataFile, "utf-8", (readErr, data) => {
         if (readErr) {
-            return res.json({ status: false, message: readErr })
+            return res.json({ status: false, message: readErr });
         }
 
-        const savedData = data ? JSON.parse(data) : []
+        const savedData = data ? JSON.parse(data) : [];
 
-        return res.json({ status: true, result: savedData })
-    })
-}
+        return res.json({ status: true, result: savedData });
+    });
+};
 
 exports.create = (req, res) => {
     const { menuName, link, position } = req.body;
@@ -23,21 +23,21 @@ exports.create = (req, res) => {
             return res.json({ status: false, message: readErr });
         }
 
-        const parsedData = data ? JSON.parse(data) : []
+        const parsedData = data ? JSON.parse(data) : [];
 
-        const newObj = { id: Date.now().toString(), menuName, link, position }
+        const newObj = { id: Date.now().toString(), menuName, link, position };
 
         parsedData.push(newObj);
 
-        fs.writeFile(dataFile, "utf-8", JSON.stringify(parsedData), (writeErr) => {
+        fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
             if (writeErr) {
-                return response.json({ status: false, message: writeErr })
+                return res.json({ status: false, message: writeErr });
             }
 
-            return response.json({ status: true, result: parsedData })
-        })
-    })
-}
+            return res.json({ status: true, result: parsedData });
+        });
+    });
+};
 
 exports.update = (req, res) => {
     const { id, menuName, link, position } = req.body;
@@ -46,25 +46,30 @@ exports.update = (req, res) => {
             return res.json({ status: false, message: readErr });
         }
 
-        const parsedData = data ? JSON.parse(data) : []
+        const parsedData = data ? JSON.parse(data) : [];
 
-        const updatedData = parsedData.map(e => {
+        const updatedData = parsedData.map((e) => {
             if (e.id == id) {
-                return { ...e, menuName, link, position }
+                return { ...e, menuName, link, position };
             } else {
-                return e
+                return e;
             }
-        })
+        });
 
-        fs.writeFile(dataFile, "utf-8", JSON.stringify(updatedData), (writeErr) => {
-            if (writeErr) {
-                return response.json({ status: false, message: writeErr })
+        fs.writeFile(
+            dataFile,
+            "utf-8",
+            JSON.stringify(updatedData),
+            (writeErr) => {
+                if (writeErr) {
+                    return response.json({ status: false, message: writeErr });
+                }
+
+                return response.json({ status: true, result: updatedData });
             }
-
-            return response.json({ status: true, result: updatedData })
-        })
-    })
-}
+        );
+    });
+};
 
 exports.delete = (req, res) => {
     const { id } = req.params;
@@ -73,15 +78,20 @@ exports.delete = (req, res) => {
             return res.json({ status: false, message: readErr });
         }
 
-        const parsedData = data ? JSON.parse(data) : []
-        const updatedData = parsedData.filter(e => e.id != id)
+        const parsedData = data ? JSON.parse(data) : [];
+        const updatedData = parsedData.filter((e) => e.id != id);
 
-        fs.writeFile(dataFile, "utf-8", JSON.stringify(updatedData), (writeErr) => {
-            if (writeErr) {
-                return response.json({ status: false, message: writeErr })
+        fs.writeFile(
+            dataFile,
+            "utf-8",
+            JSON.stringify(updatedData),
+            (writeErr) => {
+                if (writeErr) {
+                    return response.json({ status: false, message: writeErr });
+                }
+
+                return response.json({ status: true, result: updatedData });
             }
-
-            return response.json({ status: true, result: updatedData })
-        })
-    })
-}
+        );
+    });
+};

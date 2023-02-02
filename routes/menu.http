@@ -1,9 +1,9 @@
 ### 
-GET  http://localhost:8000/menu
+GET  http://localhost:8000/api/menu
 
 
 ### 
-POST  http://localhost:8000/menu
+POST  http://localhost:8000/api/menu
 Content-Type: application/json
 
 {

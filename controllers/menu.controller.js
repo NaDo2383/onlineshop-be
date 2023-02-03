@@ -83,7 +83,6 @@ exports.delete = (req, res) => {
 
         fs.writeFile(
             dataFile,
-            "utf-8",
             JSON.stringify(updatedData),
             (writeErr) => {
                 if (writeErr) {

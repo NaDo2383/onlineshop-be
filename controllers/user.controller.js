@@ -2,7 +2,7 @@ const { response } = require("express");
 const fs = require("fs");
 const { parse } = require("path");
 
-const dataFile = process.cwd() + "/data/menu.json";
+const dataFile = process.cwd() + "/data/user.json";
 
 exports.getAll = (req, res) => {
     fs.readFile(dataFile, "utf-8", (readErr, data) => {
@@ -17,7 +17,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.create = (req, res) => {
-    const { menuName, link, position } = req.body;
+    const { userName, firstName, lastName, age, address, isAdmin } = req.body;
     fs.readFile(dataFile, "utf-8", (readErr, data) => {
         if (readErr) {
             return res.json({ status: false, message: readErr });
@@ -25,7 +25,15 @@ exports.create = (req, res) => {
 
         const parsedData = data ? JSON.parse(data) : [];
 
-        const newObj = { id: Date.now().toString(), menuName, link, position };
+        const newObj = {
+            id: Date.now().toString() + "user",
+            userName,
+            firstName,
+            lastName,
+            age,
+            address,
+            isAdmin,
+        };
 
         parsedData.push(newObj);
 
@@ -40,7 +48,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    const { id, menuName, link, position } = req.body;
+    const { userName, firstName, lastName, age, address, isAdmin } = req.body;
     fs.readFile(dataFile, "utf-8", (readErr, data) => {
         if (readErr) {
             return res.json({ status: false, message: readErr });
@@ -50,7 +58,15 @@ exports.update = (req, res) => {
 
         const updatedData = parsedData.map((e) => {
             if (e.id == id) {
-                return { ...e, menuName, link, position };
+                return {
+                    ...e,
+                    userName,
+                    firstName,
+                    lastName,
+                    age,
+                    address,
+                    isAdmin,
+                };
             } else {
                 return e;
             }

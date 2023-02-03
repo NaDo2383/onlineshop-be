@@ -1,1 +1,10 @@
-json
+[
+    {
+        "id": "1675339983139",
+        "cateName": "cloth"
+    },
+    {
+        "id": "1675340049946category",
+        "cateName": "cloth1"
+    }
+]

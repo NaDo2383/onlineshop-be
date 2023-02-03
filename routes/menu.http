@@ -1,13 +1,34 @@
 ### 
-GET  http://localhost:8000/menu
+GET  http://localhost:8000/api/menu
 
 
 ### 
-POST  http://localhost:8000/menu
+POST  http://localhost:8000/api/menu
 Content-Type: application/json
 
 {
-    "menuName":"Home",
-    "link":"/home",
-    "position":1
+    "menuName":"Cate",
+    "link":"/cate",
+    "position":5
+}
+
+### 
+POST  http://localhost:8000/api/user
+Content-Type: application/json
+
+{
+    "userName" : "nado",
+    "firstName": "narandorj",
+    "lastName":"Byambadorj",
+    "age":25,
+    "address":"ub dadadada",
+    "isAdmin": true
+}
+
+### 
+POST  http://localhost:8000/api/cate
+Content-Type: application/json
+
+{
+    "cateName" : "cloth1"
 }

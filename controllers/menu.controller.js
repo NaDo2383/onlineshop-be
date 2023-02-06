@@ -56,18 +56,13 @@ exports.update = (req, res) => {
             }
         });
 
-        fs.writeFile(
-            dataFile,
-            "utf-8",
-            JSON.stringify(updatedData),
-            (writeErr) => {
-                if (writeErr) {
-                    return res.json({ status: false, message: writeErr });
-                }
-
-                return res.json({ status: true, result: updatedData });
+        fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
             }
-        );
+
+            return res.json({ status: true, result: updatedData });
+        });
     });
 };
 
@@ -81,16 +76,40 @@ exports.delete = (req, res) => {
         const parsedData = data ? JSON.parse(data) : [];
         const updatedData = parsedData.filter((e) => e.id != id);
 
-        fs.writeFile(
-            dataFile,
-            JSON.stringify(updatedData),
-            (writeErr) => {
-                if (writeErr) {
-                    return res.json({ status: false, message: writeErr });
-                }
-
-                return res.json({ status: true, result: updatedData });
+        fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
             }
-        );
+
+            return res.json({ status: true, result: updatedData });
+        });
+    });
+};
+
+exports.deleteSelected = (req, res) => {
+    const { body } = req.body;
+    console.log(body);
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, uermessage: readErr });
+        }
+
+        const parsedData = data ? JSON.parse(data) : [];
+
+        body?.map((e) => {
+            parsedData.map((a, index) => {
+                if (a.id == e) {
+                    parsedData.splice(index, 1);
+                }
+            });
+        });
+
+        fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
+            }
+
+            return res.json({ status: true, result: parsedData });
+        });
     });
 };

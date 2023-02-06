@@ -7,9 +7,9 @@ POST  http://localhost:8000/api/menu
 Content-Type: application/json
 
 {
-    "menuName":"Cate",
-    "link":"/cate",
-    "position":5
+    "menuName":"Cate1",
+    "link":"/cate1",
+    "position":1
 }
 
 ### 
@@ -32,3 +32,18 @@ Content-Type: application/json
 {
     "cateName" : "cloth1"
 }
+
+
+### 
+DELETE   http://localhost:8000/api/menu
+Content-Type: application/json
+
+{
+    "arrWillDelete":["1675409843443","1675409850479"]
+}
+
+
+### 
+DELETE   http://localhost:8000/api/menu/1675393142861
+
+

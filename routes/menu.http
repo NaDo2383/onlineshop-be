@@ -39,7 +39,7 @@ DELETE   http://localhost:8000/api/menu
 Content-Type: application/json
 
 {
-    "arrWillDelete":["1675409843443","1675409850479"]
+    "arrWillDelete":["1675646259709","1675646266597"]
 }
 
 

@@ -5,171 +5,172 @@ const { parse } = require("path");
 const dataFile = process.cwd() + "/data/products.json";
 
 exports.getAll = (req, res) => {
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, message: readErr });
+        }
 
-    const savedData = data ? JSON.parse(data) : [];
+        const savedData = data ? JSON.parse(data) : [];
 
-    return res.json({ status: true, result: savedData });
-  });
+        return res.json({ status: true, result: savedData });
+    });
 };
 
 exports.create = (req, res) => {
-  const {
-    productName,
-    cateId,
-    price,
-    thumb_Image,
-    img,
-    salePer,
-    quantity,
-    brandId,
-    description,
-    crewatedDat,
-    updatedDate,
-    createdUser,
-    updatedUser,
-  } = req.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
+    const {
+        productName,
+        cateId,
+        price,
+        thumb_Image,
+        img,
+        salePer,
+        quantity,
+        brandId,
+        description,
+        createdDated,
+        updatedDate,
+        createdUser,
+        updatedUser,
+    } = req.body;
+    console.log("body", req.body);
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, message: readErr });
+        }
 
-    const parsedData = data ? JSON.parse(data) : [];
+        const parsedData = data ? JSON.parse(data) : [];
 
-    const newObj = {
-      id: Date.now().toString() + "product",
-      productName,
-      cateId,
-      price,
-      thumb_Image,
-      img,
-      salePer,
-      quantity,
-      brandId,
-      description,
-      crewatedDat,
-      updatedDate,
-      createdUser,
-      updatedUser,
-    };
+        const newObj = {
+            id: Date.now().toString() + "product",
+            createdDated: Date.now(),
+            productName,
+            cateId,
+            price,
+            thumb_Image,
+            img,
+            salePer,
+            quantity,
+            brandId,
+            description,
+            createdUser,
+            updatedDate,
+            updatedUser,
+        };
+        console.log(newObj);
+        parsedData.push(newObj);
 
-    parsedData.push(newObj);
+        fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
+            }
 
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: parsedData });
+            return res.json({ status: true, result: parsedData });
+        });
     });
-  });
 };
 
 exports.update = (req, res) => {
-  const {
-    id,
-    productName,
-    cateId,
-    price,
-    thumb_Image,
-    img,
-    salePer,
-    quantity,
-    brandId,
-    description,
-    crewatedDat,
-    updatedDate,
-    createdUser,
-    updatedUser,
-  } = req.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
+    const {
+        id,
+        productName,
+        cateId,
+        price,
+        thumb_Image,
+        img,
+        salePer,
+        quantity,
+        brandId,
+        description,
+        createdDated,
+        updatedDate,
+        createdUser,
+        updatedUser,
+    } = req.body;
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, message: readErr });
+        }
 
-    const parsedData = data ? JSON.parse(data) : [];
+        const parsedData = data ? JSON.parse(data) : [];
 
-    const updatedData = parsedData.map((e) => {
-      if (e.id == id) {
-        return {
-          ...e,
-          productName,
-          cateId,
-          price,
-          thumb_Image,
-          img,
-          salePer,
-          quantity,
-          brandId,
-          description,
-          crewatedDat,
-          updatedDate,
-          createdUser,
-          updatedUser,
-        };
-      } else {
-        return e;
-      }
+        const updatedData = parsedData.map((e) => {
+            if (e.id == id) {
+                return {
+                    ...e,
+                    productName,
+                    cateId,
+                    price,
+                    thumb_Image,
+                    img,
+                    salePer,
+                    quantity,
+                    brandId,
+                    description,
+                    createdDated,
+                    updatedDate: Date.now(),
+                    createdUser,
+                    updatedUser,
+                };
+            } else {
+                return e;
+            }
+        });
+
+        fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
+            }
+
+            return res.json({ status: true, result: updatedData });
+        });
     });
-
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: updatedData });
-    });
-  });
 };
 
 exports.delete = (req, res) => {
-  const { id } = req.params;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
+    const { id } = req.params;
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, message: readErr });
+        }
 
-    const parsedData = data ? JSON.parse(data) : [];
-    const updatedData = parsedData.filter((e) => e.id != id);
+        const parsedData = data ? JSON.parse(data) : [];
+        const updatedData = parsedData.filter((e) => e.id != id);
 
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
+        fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
+            }
 
-      return res.json({ status: true, result: updatedData });
+            return res.json({ status: true, result: updatedData });
+        });
     });
-  });
 };
 
 exports.deleteSelected = (req, res) => {
-  const body = req.body;
+    const body = req.body;
 
-  console.log(body);
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, uermessage: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    body.map((e) => {
-      parsedData.map((a, index) => {
-        if (a.id == e) {
-          parsedData.splice(index, 1);
+    console.log(body);
+    fs.readFile(dataFile, "utf-8", (readErr, data) => {
+        if (readErr) {
+            return res.json({ status: false, uermessage: readErr });
         }
-      });
-    });
 
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
+        const parsedData = data ? JSON.parse(data) : [];
 
-      return res.json({ status: true, result: parsedData });
+        body.map((e) => {
+            parsedData.map((a, index) => {
+                if (a.id == e) {
+                    parsedData.splice(index, 1);
+                }
+            });
+        });
+
+        fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
+            if (writeErr) {
+                return res.json({ status: false, message: writeErr });
+            }
+
+            return res.json({ status: true, result: parsedData });
+        });
     });
-  });
 };

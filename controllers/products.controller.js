@@ -132,6 +132,7 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
   const { id } = req.params;
+  console.log(id);
   fs.readFile(dataFile, "utf-8", (readErr, data) => {
     if (readErr) {
       return res.json({ status: false, message: readErr });

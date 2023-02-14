@@ -1,11 +1,1 @@
-[
-  {
-    "id": "1675339438316user",
-    "userName": "nado",
-    "firstName": "narandorj",
-    "lastName": "Byambadorj",
-    "age": 25,
-    "address": "ub dadadada",
-    "isAdmin": true
-  }
-]
+[{"id":"1675339438316user","userName":"nado","firstName":"narandorj","lastName":"Byambadorj","age":25,"address":"ub dadadada","isAdmin":true},{"id":"1676344913245user","userName":"test","firstName":"test","lastName":"test","age":"test","address":"test","isAdmin":"test","password":"testpass"},{"id":"1676345016084user","userName":"test","firstName":"test","lastName":"test","age":"test","address":"test","isAdmin":"test","password":"$2b$10$7UIF9gv12ymZoj0Q5TVCVe3uveLO5EWCDEVaJZ1McJbmW7xnIVQvq"}]

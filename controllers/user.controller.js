@@ -1,113 +1,160 @@
 const { response } = require("express");
 const fs = require("fs");
 const { parse } = require("path");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+const myPlaintextPassword = "s0//P4$$w0rD";
 
 const dataFile = process.cwd() + "/data/user.json";
 
 exports.getAll = (req, res) => {
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return res.json({ status: false, message: readErr });
-        }
+  fs.readFile(dataFile, "utf-8", (readErr, data) => {
+    if (readErr) {
+      return res.json({ status: false, message: readErr });
+    }
 
-        const savedData = data ? JSON.parse(data) : [];
+    const savedData = data ? JSON.parse(data) : [];
 
-        return res.json({ status: true, result: savedData });
-    });
+    return res.json({ status: true, result: savedData });
+  });
 };
 
 exports.create = (req, res) => {
-    const { userName, firstName, lastName, age, address, isAdmin } = req.body;
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return res.json({ status: false, message: readErr });
-        }
+  const { userName, firstName, lastName, age, address, isAdmin, password } =
+    req.body;
+  fs.readFile(dataFile, "utf-8", async (readErr, data) => {
+    if (readErr) {
+      return res.json({ status: false, message: readErr });
+    }
 
-        const parsedData = data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : [];
 
-        const newObj = {
-            id: Date.now().toString() + "user",
-            userName,
-            firstName,
-            lastName,
-            age,
-            address,
-            isAdmin,
-        };
+    const newPassword = await bcrypt.hash(password, saltRounds);
 
-        parsedData.push(newObj);
+    console.log(newPassword);
 
-        fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-            if (writeErr) {
-                return res.json({ status: false, message: writeErr });
-            }
+    const newObj = {
+      id: Date.now().toString() + "user",
+      userName,
+      firstName,
+      lastName,
+      age,
+      address,
+      isAdmin,
+      password: newPassword,
+    };
 
-            return res.json({ status: true, result: parsedData });
-        });
+    parsedData.push(newObj);
+
+    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
+      if (writeErr) {
+        return res.json({ status: false, message: writeErr });
+      }
+
+      return res.json({ status: true, result: parsedData });
     });
+  });
 };
 
 exports.update = (req, res) => {
-    const { userName, firstName, lastName, age, address, isAdmin } = req.body;
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return res.json({ status: false, message: readErr });
-        }
+  const { userName, firstName, lastName, age, address, isAdmin } = req.body;
+  fs.readFile(dataFile, "utf-8", (readErr, data) => {
+    if (readErr) {
+      return res.json({ status: false, message: readErr });
+    }
 
-        const parsedData = data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : [];
 
-        const updatedData = parsedData.map((e) => {
-            if (e.id == id) {
-                return {
-                    ...e,
-                    userName,
-                    firstName,
-                    lastName,
-                    age,
-                    address,
-                    isAdmin,
-                };
-            } else {
-                return e;
-            }
-        });
-
-        fs.writeFile(
-            dataFile,
-            "utf-8",
-            JSON.stringify(updatedData),
-            (writeErr) => {
-                if (writeErr) {
-                    return res.json({ status: false, message: writeErr });
-                }
-
-                return res.json({ status: true, result: updatedData });
-            }
-        );
+    const updatedData = parsedData.map((e) => {
+      if (e.id == id) {
+        return {
+          ...e,
+          userName,
+          firstName,
+          lastName,
+          age,
+          address,
+          isAdmin,
+        };
+      } else {
+        return e;
+      }
     });
+
+    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+      if (writeErr) {
+        return res.json({ status: false, message: writeErr });
+      }
+
+      return res.json({ status: true, result: updatedData });
+    });
+  });
 };
 
 exports.delete = (req, res) => {
-    const { id } = req.params;
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return res.json({ status: false, message: readErr });
-        }
+  const { id } = req.params;
+  fs.readFile(dataFile, "utf-8", (readErr, data) => {
+    if (readErr) {
+      return res.json({ status: false, message: readErr });
+    }
 
-        const parsedData = data ? JSON.parse(data) : [];
-        const updatedData = parsedData.filter((e) => e.id != id);
+    const parsedData = data ? JSON.parse(data) : [];
+    const updatedData = parsedData.filter((e) => e.id != id);
 
-        fs.writeFile(
-            dataFile,
-            "utf-8",
-            JSON.stringify(updatedData),
-            (writeErr) => {
-                if (writeErr) {
-                    return res.json({ status: false, message: writeErr });
-                }
+    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
+      if (writeErr) {
+        return res.json({ status: false, message: writeErr });
+      }
 
-                return res.json({ status: true, result: updatedData });
-            }
-        );
+      return res.json({ status: true, result: updatedData });
     });
+  });
+};
+
+exports.login = (request, response) => {
+  const { email, password } = request.body;
+
+  if (!email || !password)
+    return response.json({
+      status: false,
+      message: "medeellee buren buglunu uu",
+    });
+
+  fs.readFile(dataFile, "utf-8", async (readErr, data) => {
+    if (readErr) {
+      return response.json({ status: false, message: readErr });
+    }
+
+    const parsedData = data ? JSON.parse(data) : [];
+    let user;
+    for (let i = 0; i < parsedData.length; i++) {
+      if (email == parsedData[i].email) {
+        const decrypt = await bcrypt.compare(password, parsedData[i].password);
+
+        if (decrypt) {
+          user = {
+            id: parsedData[i].id,
+            email: parsedData[i].email,
+            lastname: parsedData[i].lastname,
+            firstname: parsedData[i].firstname,
+          };
+          break;
+        }
+      }
+    }
+
+    console.log(user);
+
+    if (user) {
+      return response.json({
+        status: true,
+        result: user,
+      });
+    } else {
+      return response.json({
+        status: false,
+        message: "Tanii email eswel nuuts ug buruu bna",
+      });
+    }
+  });
 };

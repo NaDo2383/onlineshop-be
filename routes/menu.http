@@ -47,3 +47,29 @@ Content-Type: application/json
 DELETE   http://localhost:8000/api/menu/1675393142861
 
 
+### 
+DELETE   http://localhost:8000/api/products/1676287237395product
+
+
+### 
+POST  http://localhost:8000/api/user
+Content-Type: application/json
+
+{
+    "userName":"test",
+      "firstName":"test",
+      "lastName":"test",
+      "age":"test",
+      "address":"test",
+      "isAdmin":"test",
+      "password":"testpass"
+}
+
+### 
+POST  http://localhost:8000/api/user/login
+Content-Type: application/json
+
+{
+    "userName":"test",
+    "password":"testpass"
+}

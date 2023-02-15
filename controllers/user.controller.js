@@ -20,8 +20,16 @@ exports.getAll = (req, res) => {
 };
 
 exports.create = (req, res) => {
-  const { userName, firstName, lastName, age, address, isAdmin, password } =
-    req.body;
+  const {
+    userName,
+    firstName,
+    lastName,
+    age,
+    address,
+    isAdmin,
+    password,
+    email,
+  } = req.body;
   fs.readFile(dataFile, "utf-8", async (readErr, data) => {
     if (readErr) {
       return res.json({ status: false, message: readErr });
@@ -41,6 +49,9 @@ exports.create = (req, res) => {
       age,
       address,
       isAdmin,
+      email,
+      favoriteProducs: [],
+      mostViewProducts: [],
       password: newPassword,
     };
 
@@ -57,7 +68,17 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const { userName, firstName, lastName, age, address, isAdmin } = req.body;
+  const {
+    userName,
+    firstName,
+    lastName,
+    age,
+    address,
+    isAdmin,
+    email,
+    favoriteProducs,
+    mostViewProducts,
+  } = req.body;
   fs.readFile(dataFile, "utf-8", (readErr, data) => {
     if (readErr) {
       return res.json({ status: false, message: readErr });
@@ -75,6 +96,9 @@ exports.update = (req, res) => {
           age,
           address,
           isAdmin,
+          email,
+          favoriteProducs,
+          mostViewProducts,
         };
       } else {
         return e;
@@ -135,8 +159,8 @@ exports.login = (request, response) => {
           user = {
             id: parsedData[i].id,
             email: parsedData[i].email,
-            lastname: parsedData[i].lastname,
-            firstname: parsedData[i].firstname,
+            lastName: parsedData[i].lastName,
+            firstName: parsedData[i].firstName,
           };
           break;
         }

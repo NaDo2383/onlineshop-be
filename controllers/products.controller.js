@@ -16,6 +16,21 @@ exports.getAll = (req, res) => {
   });
 };
 
+exports.getOne = (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  fs.readFile(dataFile, "utf-8", (readErr, data) => {
+    if (readErr) {
+      return res.json({ status: false, message: readErr });
+    }
+
+    const parsedData = data ? JSON.parse(data) : [];
+    const savedData = parsedData.filter((e) => e.id == id);
+
+    return res.json({ status: true, result: savedData });
+  });
+};
+
 exports.create = (req, res) => {
   const {
     productName,

@@ -1,6 +1,9 @@
 ### 
-GET  http://localhost:8000/api/menu
+GET  http://localhost:8000/api/products
 
+
+### 
+GET  http://localhost:8000/api/products/1676261590588product
 
 ### 
 POST  http://localhost:8000/api/menu
